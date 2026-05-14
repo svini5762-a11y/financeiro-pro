@@ -1,67 +1,79 @@
 <!DOCTYPE html>
-<!-- saved from url=(0088)file:///C:/Users/svini/OneDrive/%C3%81rea%20de%20Trabalho/gemini-code-1778760900079.html -->
-<html lang="pt-br"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ATALHO DO ÍCONE (FAVICON) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;rect width=&#39;100&#39; height=&#39;100&#39; rx=&#39;25&#39; fill=&#39;%234f46e5&#39;/&gt;&lt;path d=&#39;M50 25L75 35V55C75 70 50 80 50 80C50 80 25 70 25 55V35L50 25Z&#39; fill=&#39;white&#39;/&gt;&lt;/svg&gt;">
     
+    <!-- TAGS DE INSTALAÇÃO (APP MOBILE) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EliteFinance">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#030508">
+    
+    <!-- ÍCONE DO APP (FAVICON) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234f46e5'/><path d='M50 25L75 35V55C75 70 50 80 50 80C50 80 25 70 25 55V35L50 25Z' fill='white'/></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234f46e5'/><path d='M50 25L75 35V55C75 70 50 80 50 80C50 80 25 70 25 55V35L50 25Z' fill='white'/></svg>">
+
     <title>Finance Elite Pro | Master</title>
-    <script src="./Finance Elite Pro _ Master_files/saved_resource"></script>
-    <script src="./Finance Elite Pro _ Master_files/lucide@latest"></script>
-    <link href="./Finance Elite Pro _ Master_files/css2" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030508; color: #f8fafc; }
         .glass { background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.03); }
         .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
         .card-exceeded { border: 2px solid #f43f5e; box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); }
         .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, opacity 0.3s; opacity: 0; }
-        .is-expanded .expandable-content { max-height: 1500px; opacity: 1; margin-top: 2rem; }
+        .is-expanded .expandable-content { max-height: 2000px; opacity: 1; margin-top: 2rem; }
         .item-row { background: #111827; border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.03); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-7{height:1.75rem}.w-7{width:1.75rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.flex-1{flex:1 1 0%}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-10{gap:2.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded-2xl{border-radius:1rem}.rounded-\[2\.5rem\]{border-radius:2.5rem}.rounded-\[3\.5rem\]{border-radius:3.5rem}.border{border-width:1px}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-12{padding:3rem}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-10{padding-left:2.5rem;padding-right:2.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pt-6{padding-top:1.5rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-indigo-500{--tw-text-opacity:1;color:rgb(99 102 241 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-indigo-500\/20{--tw-shadow-color:rgb(99 102 241 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-2xl{--tw-backdrop-blur:blur(40px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-600:hover{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:p-10{padding:2.5rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:flex-row{flex-direction:row}}</style></head>
-<body class="p-4 md:p-10">
+</head>
+<body class="p-4 md:p-10 custom-scroll">
 
+    <!-- CABEÇALHO -->
     <header class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-6 mb-12">
         <div class="flex items-center gap-4">
-            <!-- ÍCONE NO LOGO DO APP -->
             <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/20">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check text-white w-7 h-7"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                <i data-lucide="shield-check" class="text-white w-7 h-7"></i>
             </div>
             <h1 class="text-3xl font-black tracking-tighter uppercase">Elite<span class="text-indigo-500">Finance</span></h1>
         </div>
-        <button onclick="openModal(&#39;modalCard&#39;)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-10 py-4 rounded-2xl shadow-xl transition-all active:scale-95 uppercase text-xs">
+        <button onclick="openModal('modalCard')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-10 py-4 rounded-2xl shadow-xl transition-all active:scale-95 uppercase text-xs">
             + Adicionar Cartão
         </button>
     </header>
 
-    <!-- INDICADORES TÉCNICOS -->
+    <!-- INDICADORES GLOBAIS -->
     <section class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <div class="glass p-8 rounded-[2.5rem]">
             <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Total Gasto</span>
-            <h2 id="totalSpent" class="text-2xl font-black tracking-tight">R$ 0.00</h2>
+            <h2 id="totalSpent" class="text-2xl font-black">R$ 0,00</h2>
         </div>
         <div class="glass p-8 rounded-[2.5rem]">
             <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 block">Disponível</span>
-            <h2 id="totalAvailable" class="text-2xl font-black text-emerald-400 tracking-tight">R$ 0.00</h2>
+            <h2 id="totalAvailable" class="text-2xl font-black text-emerald-400">R$ 0,00</h2>
         </div>
         <div class="glass p-8 rounded-[2.5rem]">
             <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-2 block">Dívida Ativa</span>
-            <h2 id="activeDebt" class="text-2xl font-black text-rose-500 tracking-tight">R$ 0.00</h2>
+            <h2 id="activeDebt" class="text-2xl font-black text-rose-500">R$ 0,00</h2>
         </div>
         <div class="glass p-8 rounded-[2.5rem]">
-            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Status</span>
-            <h2 id="exceededStatus" class="text-[10px] font-black text-emerald-400 mt-1">Saúde Perfeita ✓</h2>
+            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Saúde Financeira</span>
+            <h2 id="exceededStatus" class="text-[10px] font-black text-emerald-400 uppercase mt-1 tracking-tighter">Perfeita ✓</h2>
         </div>
     </section>
 
+    <!-- GRID DE CARTÕES -->
     <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="cardsGrid"></main>
 
-    <!-- MODAL: NOVO CARTÃO -->
+    <!-- MODAL NOVO CARTÃO -->
     <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
         <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
-            <h3 class="text-2xl font-black mb-8 tracking-tighter uppercase">Configurar Novo Cartão</h3>
+            <h3 class="text-2xl font-black mb-8 tracking-tighter uppercase text-center">Configurar Cartão</h3>
             <div class="space-y-6">
                 <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm">
                     <option value="Neon">Neon</option>
@@ -75,10 +87,10 @@
                     <option value="BB">Banco do Brasil</option>
                     <option value="Caixa">Caixa</option>
                 </select>
-                <input type="text" id="cardUse" placeholder="Finalidade (Ex: Pets)" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none uppercase font-bold text-sm">
-                <input type="number" id="cardLimit" placeholder="Limite Total R$" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm">
+                <input type="text" id="cardUse" placeholder="Uso (Ex: Farmácia)" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none uppercase font-bold text-sm">
+                <input type="number" id="cardLimit" placeholder="Limite R$" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm">
                 <div class="flex gap-6 pt-6">
-                    <button onclick="closeModal(&#39;modalCard&#39;)" class="flex-1 font-bold text-slate-500">Cancelar</button>
+                    <button onclick="closeModal('modalCard')" class="flex-1 font-bold text-slate-500 uppercase text-xs">Cancelar</button>
                     <button onclick="addCard()" class="flex-1 bg-white text-black font-black py-4 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all uppercase text-xs">Salvar</button>
                 </div>
             </div>
@@ -99,7 +111,7 @@
             Caixa: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#005ca9"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">X</text>`
         };
 
-        const categories = [
+        const allCategories = [
             { id: 'cart', name: 'MERCADO', icon: '🛒' },
             { id: 'pill', name: 'FARMÁCIA', icon: '💊' },
             { id: 'burger', name: 'COMIDA', icon: '🍔' },
@@ -107,12 +119,18 @@
             { id: 'shirt', name: 'ROUPAS', icon: '👕' },
             { id: 'movie', name: 'LAZER', icon: '🎬' },
             { id: 'tech', name: 'TECH', icon: '📱' },
+            { id: 'health', name: 'MÉDICO', icon: '🏥' },
+            { id: 'home', name: 'CASA', icon: '🏠' },
+            { id: 'study', name: 'ESTUDOS', icon: '📚' },
+            { id: 'travel', name: 'VIAGEM', icon: '✈️' },
+            { id: 'energy', name: 'CONTAS', icon: '💡' },
             { id: 'pets', name: 'PETS', icon: '🐾' },
-            { id: 'travel', name: 'VIAGEM', icon: '✈️' }
+            { id: 'gift', name: 'PRESENTE', icon: '🎁' },
+            { id: 'invest', name: 'INVESTIMENTOS', icon: '💰' }
         ];
 
-        let cards = JSON.parse(localStorage.getItem('elite_master_v9')) || [];
-        let txs = JSON.parse(localStorage.getItem('tx_elite_v9')) || [];
+        let cards = JSON.parse(localStorage.getItem('elite_master_v10')) || [];
+        let txs = JSON.parse(localStorage.getItem('tx_elite_v10')) || [];
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
@@ -120,7 +138,7 @@
         function toggleExpand(id) {
             const cardEl = document.getElementById(`card-${id}`);
             cardEl.classList.toggle('is-expanded');
-            cardEl.querySelector('.toggle-btn').innerText = cardEl.classList.contains('is-expanded') ? 'Fechar Detalhes' : 'Gerenciar Despesas';
+            cardEl.querySelector('.toggle-btn').innerText = cardEl.classList.contains('is-expanded') ? 'Fechar Painel' : 'Gerenciar Despesas';
             lucide.createIcons();
         }
 
@@ -139,7 +157,7 @@
             const date = document.getElementById(`date-${cardId}`).value;
             const catId = document.getElementById(`cat-${cardId}`).value;
             if(!desc || isNaN(val) || !date) return;
-            txs.unshift({ id: Date.now(), cardId, desc, val, date, cat: categories.find(i => i.id === catId) });
+            txs.unshift({ id: Date.now(), cardId, desc, val, date, cat: allCategories.find(i => i.id === catId) });
             cards.find(c => c.id === cardId).spent += val;
             sync();
         }
@@ -152,7 +170,7 @@
         }
 
         function deleteCard(id) {
-            if(confirm("Excluir este cartão?")) {
+            if(confirm("Excluir este cartão definitivamente?")) {
                 cards = cards.filter(c => c.id !== id);
                 txs = txs.filter(t => t.cardId !== id);
                 sync();
@@ -160,8 +178,8 @@
         }
 
         function sync() {
-            localStorage.setItem('elite_master_v9', JSON.stringify(cards));
-            localStorage.setItem('tx_elite_v9', JSON.stringify(txs));
+            localStorage.setItem('elite_master_v10', JSON.stringify(cards));
+            localStorage.setItem('tx_elite_v10', JSON.stringify(txs));
             render();
         }
 
@@ -178,7 +196,7 @@
 
             const statusEl = document.getElementById('exceededStatus');
             if(exceeded.length > 0) {
-                statusEl.innerText = "ALERTA DE DÍVIDA!";
+                statusEl.innerText = "ALERTA: DÍVIDA!";
                 statusEl.className = "text-[10px] font-black text-rose-500 animate-pulse mt-1";
             } else {
                 statusEl.innerText = "Saúde Perfeita ✓";
@@ -221,7 +239,7 @@
                     </button>
 
                     <div class="expandable-content">
-                        <div class="bg-black/30 rounded-[2.5rem] p-6 mb-8 border border-white/5 space-y-4 max-h-[250px] overflow-y-auto custom-scroll">
+                        <div class="bg-black/30 rounded-[2.5rem] p-6 mb-8 border border-white/5 space-y-4 max-h-[300px] overflow-y-auto custom-scroll">
                             ${cardTxs.map(t => `
                                 <div class="item-row p-5 flex justify-between items-center group">
                                     <div class="flex items-center gap-5">
@@ -246,7 +264,7 @@
                                 <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[11px] font-bold outline-none">
                             </div>
                             <select id="cat-${c.id}" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-5 text-xs font-black outline-none appearance-none uppercase">
-                                ${categories.map(cat => `<option value="${cat.id}">${cat.icon} &nbsp; ${cat.name}</option>`).join('')}
+                                ${allCategories.map(cat => `<option value="${cat.id}">${cat.icon} &nbsp; ${cat.name}</option>`).join('')}
                             </select>
                             <button onclick="addExpense(${c.id})" class="w-full bg-white text-black font-black py-6 rounded-[1.8rem] text-xs hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-tighter shadow-2xl">Confirmar Lançamento</button>
                         </div>
@@ -258,5 +276,5 @@
 
         render();
     </script>
-
-</body></html>
+</body>
+</html>
