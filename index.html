@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <title>Elite Finance Pro | Master</title>
+    <title>Elite Finance Pro | Master Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,12 +27,12 @@
             .stats-card { min-width: 80%; scroll-snap-align: center; }
         }
 
-        .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
+        .card-main { background-color: #0b101a; border-radius: 3.5rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
         .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; opacity: 0; }
-        .is-expanded .expandable-content { max-height: 3000px; opacity: 1; margin-top: 1.5rem; }
+        .is-expanded .expandable-content { max-height: 4000px; opacity: 1; margin-top: 1.5rem; }
         
-        .item-row { background: #111827; border-radius: 1.8rem; border: 1px solid rgba(255, 255, 255, 0.02); }
-        .icon-box { background: #0b101a; border: 1px solid rgba(255, 255, 255, 0.05); min-width: 3.5rem; height: 3.5rem; }
+        .item-row { background: #111827; border-radius: 2rem; border: 1px solid rgba(255, 255, 255, 0.02); }
+        .icon-box { background: #0b101a; border: 1px solid rgba(255, 255, 255, 0.05); min-width: 4rem; height: 4rem; }
         
         .btn-active:active { transform: scale(0.95); opacity: 0.8; }
     </style>
@@ -41,8 +41,8 @@
 
     <!-- LOGIN -->
     <div id="authScreen" class="fixed inset-0 z-[100] bg-[#030508] flex items-center justify-center p-6">
-        <div class="glass w-full max-w-md p-10 rounded-[3.5rem] text-center border-white/5">
-            <div class="w-24 h-24 bg-slate-900 rounded-[2rem] mx-auto mb-8 flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
+        <div class="glass w-full max-w-md p-10 rounded-[4rem] text-center border-white/5">
+            <div class="w-24 h-24 bg-slate-900 rounded-[2.5rem] mx-auto mb-8 flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
                 <img src="icon.png" class="w-full h-full object-cover">
             </div>
             <h2 class="text-3xl font-black uppercase tracking-tighter mb-2">Elite<span class="text-indigo-500">Finance</span></h2>
@@ -75,12 +75,13 @@
 
     <!-- MODAL -->
     <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
-        <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
+        <div class="glass w-full max-w-lg rounded-[4rem] p-12">
             <h3 class="text-2xl font-black mb-8 uppercase text-center text-white tracking-tighter">Novo Cartão</h3>
             <div class="space-y-6">
                 <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
                     <option value="Neon">Neon</option><option value="Nubank">Nubank</option><option value="C6">C6 Bank</option>
                     <option value="PicPay">PicPay</option><option value="Santander">Santander</option><option value="Inter">Inter</option>
+                    <option value="Caixa">Caixa</option><option value="Bradesco">Bradesco</option><option value="Itau">Itaú</option>
                 </select>
                 <input type="text" id="cardUse" placeholder="EX: PESSOAL" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm uppercase outline-none">
                 <input type="number" id="cardLimit" placeholder="LIMITE TOTAL R$" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
@@ -141,7 +142,7 @@
         }
 
         async function deleteCard(id) {
-            if(confirm("Deseja apagar este cartão permanentemente?")) {
+            if(confirm("Deseja apagar este cartão e todas as suas despesas?")) {
                 await _supabase.from('cartoes').delete().eq('id', id);
                 fetchData();
             }
@@ -157,9 +158,9 @@
             fetchData();
         }
 
-        // --- NOVA FUNÇÃO DE EXCLUSÃO DE DESPESA ---
+        // --- FUNÇÃO PARA REMOVER DESPESA ---
         async function deleteExpense(tId) {
-            if(confirm("Remover esta despesa?")) {
+            if(confirm("Excluir este lançamento?")) {
                 await _supabase.from('transacoes').delete().eq('id', tId);
                 fetchData();
             }
@@ -179,7 +180,10 @@
             C6: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#111"/><text x="50" y="65" text-anchor="middle" fill="#facc15" font-weight="900" font-size="40">C6</text>`,
             PicPay: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#21C25E"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="30">PPay</text>`,
             Santander: `<circle cx="50" cy="50" r="45" fill="#EC0000"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">S</text>`,
-            Inter: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ff7a00"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">In</text>`
+            Inter: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ff7a00"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">In</text>`,
+            Caixa: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#005ca9"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">X</text>`,
+            Bradesco: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#cc092f"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">B</text>`,
+            Itau: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ec6608"/><text x="50" y="65" text-anchor="middle" fill="#003399" font-weight="900" font-size="40">I</text>`
         };
 
         const categories = [
@@ -209,19 +213,19 @@
             const isExceeded = totalDebt > 0;
 
             document.getElementById('statsContainer').innerHTML = `
-                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                <div class="glass p-8 rounded-[3rem] stats-card">
                     <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block tracking-widest">Total Gasto</span>
                     <h2 class="text-2xl font-black">R$ ${globalSpent.toFixed(2)}</h2>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                <div class="glass p-8 rounded-[3rem] stats-card">
                     <span class="text-[9px] font-black text-emerald-500 uppercase mb-2 block tracking-widest">Disponível</span>
                     <h2 class="text-2xl font-black text-emerald-400">R$ ${Math.max(0, globalLimit - globalSpent).toFixed(2)}</h2>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                <div class="glass p-8 rounded-[3rem] stats-card">
                     <span class="text-[9px] font-black text-rose-500 uppercase mb-2 block tracking-widest">Dívida Ativa</span>
                     <h2 class="text-2xl font-black text-rose-500">R$ ${totalDebt.toFixed(2)}</h2>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                <div class="glass p-8 rounded-[3rem] stats-card">
                     <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block tracking-widest">Saúde</span>
                     <h2 class="text-[12px] font-black uppercase ${isExceeded ? 'text-rose-500 animate-pulse' : 'text-emerald-400'}">${isExceeded ? 'Crítica' : 'Excelente'}</h2>
                 </div>
@@ -236,7 +240,7 @@
                 <div id="card-wrap-${c.id}" class="card-main p-10 flex flex-col ${isOver ? 'border-rose-500/40 shadow-2xl shadow-rose-500/10' : ''}">
                     <div class="flex justify-between items-start mb-8">
                         <div class="flex gap-5">
-                            <div class="w-16 h-16 bg-white rounded-3xl p-3 flex items-center justify-center shadow-lg">
+                            <div class="w-16 h-16 bg-white rounded-[2rem] p-3 flex items-center justify-center shadow-lg">
                                 <svg viewBox="0 0 100 100" class="w-full h-full">${bankLogos[c.bank] || ''}</svg>
                             </div>
                             <div>
@@ -247,44 +251,44 @@
                         <button onclick="deleteCard('${c.id}')" class="text-slate-800 hover:text-rose-500 p-2 transition-all"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
 
-                    <div class="mb-8">
+                    <div class="mb-10">
                         <h2 class="text-4xl font-black ${isOver ? 'text-rose-500' : 'text-white'}">R$ ${c.actualSpent.toFixed(2)}</h2>
                         <div class="flex justify-between text-[10px] font-black text-slate-500 mt-5 uppercase tracking-[0.2em]">
                             <span>USO: ${perc.toFixed(0)}%</span>
                             <span>LIMITE: R$ ${c.card_limit}</span>
                         </div>
-                        <div class="h-2 w-full bg-slate-900 rounded-full mt-4 overflow-hidden">
+                        <div class="h-2.5 w-full bg-slate-900 rounded-full mt-4 overflow-hidden">
                             <div class="h-full ${isOver ? 'bg-rose-500' : 'bg-indigo-500'} transition-all duration-1000" style="width: ${perc}%"></div>
                         </div>
                     </div>
 
-                    <button onclick="toggleExpand('${c.id}')" class="w-full py-5 bg-slate-800/40 rounded-[1.8rem] text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:bg-indigo-500/10 hover:text-indigo-400 transition-all">Gerenciar Despesas</button>
+                    <button onclick="toggleExpand('${c.id}')" class="w-full py-5 bg-slate-800/40 rounded-3xl text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:bg-indigo-500/10 hover:text-indigo-400 transition-all">Gerenciar Despesas</button>
 
                     <div class="expandable-content">
-                        <div class="bg-black/30 rounded-[2.5rem] p-6 mb-8 space-y-4 max-h-[400px] overflow-y-auto">
+                        <div class="bg-black/30 rounded-[3rem] p-6 mb-8 space-y-4 max-h-[500px] overflow-y-auto">
                             ${cardTxs.map(t => `
-                                <div class="item-row p-5 flex justify-between items-center group">
-                                    <div class="flex items-center gap-5">
-                                        <div class="icon-box rounded-2xl flex items-center justify-center shadow-inner">
-                                            <span class="text-2xl">${categories.find(cat => cat.id === t.category_id)?.icon || '💰'}</span>
+                                <div class="item-row p-6 flex justify-between items-center group">
+                                    <div class="flex items-center gap-6">
+                                        <div class="icon-box rounded-3xl flex items-center justify-center shadow-inner">
+                                            <span class="text-3xl">${categories.find(cat => cat.id === t.category_id)?.icon || '💰'}</span>
                                         </div>
                                         <div>
-                                            <p class="text-[11px] font-black text-slate-100 uppercase tracking-tight">${t.description}</p>
-                                            <p class="text-[8px] font-bold text-slate-600 tracking-widest">${t.date.split('-').reverse().join('/')}</p>
+                                            <p class="text-[12px] font-black text-slate-100 uppercase tracking-tight">${t.description}</p>
+                                            <p class="text-[9px] font-bold text-slate-600 tracking-widest">${t.date.split('-').reverse().join('/')}</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-4">
-                                        <span class="text-[11px] font-black text-rose-500">- R$ ${t.amount.toFixed(2)}</span>
-                                        <button onclick="deleteExpense('${t.id}')" class="text-slate-800 hover:text-rose-500 transition-colors">
-                                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                    <div class="flex items-center gap-6">
+                                        <span class="text-[12px] font-black text-rose-500">- R$ ${t.amount.toFixed(2)}</span>
+                                        <button onclick="deleteExpense('${t.id}')" class="p-3 -mr-3 text-slate-600 hover:text-rose-500 transition-colors">
+                                            <i data-lucide="trash" class="w-5 h-5"></i>
                                         </button>
                                     </div>
                                 </div>
-                            `).join('') || '<p class="text-center text-[10px] text-slate-700 py-10 font-black uppercase tracking-widest">Lista Vazia</p>'}
+                            `).join('') || '<p class="text-center text-[10px] text-slate-700 py-12 font-black uppercase tracking-widest">Sem despesas registradas</p>'}
                         </div>
 
                         <div class="space-y-6 pt-6 border-t border-slate-800/50">
-                            <input type="text" id="desc-${c.id}" placeholder="O QUE COMPROU?" class="w-full bg-transparent border-b border-slate-800 py-4 text-xs text-white uppercase outline-none focus:border-indigo-500 font-bold tracking-widest">
+                            <input type="text" id="desc-${c.id}" placeholder="O QUE FOI COMPRADO?" class="w-full bg-transparent border-b border-slate-800 py-4 text-xs text-white uppercase outline-none focus:border-indigo-500 font-bold tracking-widest">
                             <div class="grid grid-cols-2 gap-5">
                                 <input type="number" id="val-${c.id}" placeholder="VALOR R$" class="bg-slate-900 rounded-2xl p-5 text-xs text-white font-black outline-none border border-transparent focus:border-indigo-500/50">
                                 <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-5 text-xs text-white font-bold outline-none border border-transparent focus:border-indigo-500/50">
@@ -292,7 +296,7 @@
                             <select id="cat-${c.id}" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-5 text-xs text-white uppercase font-black outline-none">
                                 ${categories.map(cat => `<option value="${cat.id}">${cat.icon} &nbsp; ${cat.name}</option>`).join('')}
                             </select>
-                            <button onclick="addExpense('${c.id}')" class="btn-active w-full bg-white text-black font-black py-6 rounded-[2rem] text-xs uppercase tracking-tighter shadow-2xl">Confirmar Lançamento</button>
+                            <button onclick="addExpense('${c.id}')" class="btn-active w-full bg-white text-black font-black py-6 rounded-[2.5rem] text-xs uppercase tracking-tighter shadow-2xl">Confirmar Lançamento</button>
                         </div>
                     </div>
                 </div>`;
