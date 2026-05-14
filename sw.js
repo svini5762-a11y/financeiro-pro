@@ -1,4 +1,5 @@
-const CACHE_NAME = 'elite-v2';
+const cacheName = 'elite-finance-v3';
+// Apenas arquivos locais do seu GitHub
 const assets = [
   './',
   './index.html',
@@ -6,27 +7,24 @@ const assets = [
   './icon.png'
 ];
 
-// Instalação e Cache
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(assets);
-    })
-  );
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(cacheName).then((cache) => cache.addAll(assets))
+    );
 });
 
-// Ativação e limpeza de caches antigos
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)));
-    })
-  );
-});
+// A CORREÇÃO ESTÁ AQUI: Só interfere se o pedido for para o seu próprio site
+self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+    
+    // Se o pedido for para o Supabase, não faça nada (deixe a rede resolver)
+    if (url.hostname.includes('supabase.co')) {
+        return; 
+    }
 
-// OBRIGATÓRIO PARA INSTALAÇÃO: Escutar requisições
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
-  );
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
 });
