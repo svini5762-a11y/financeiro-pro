@@ -5,133 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#030508">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <title>Elite Finance Pro | Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carregamento robusto do Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030508; color: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030508; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.03); }
         .is-hidden { display: none !important; }
-        .card-main { background-color: #0b101a; border-radius: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.05); }
+        @media (max-width: 768px) {
+            .stats-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 1rem; padding-bottom: 1rem; scrollbar-width: none; }
+            .stats-container::-webkit-scrollbar { display: none; }
+            .stats-card { min-width: 85%; scroll-snap-align: center; }
+            .card-main { padding: 1.5rem !important; border-radius: 2.5rem !important; }
+        }
+        .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
         .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; opacity: 0; }
         .is-expanded .expandable-content { max-height: 2000px; opacity: 1; margin-top: 1.5rem; }
+        .item-row { background: #111827; border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.03); }
+        /* Feedback visual para o botão */
+        .btn-active:active { transform: scale(0.95); opacity: 0.8; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <!-- TELA DE LOGIN -->
-    <div id="authScreen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
-        <div class="glass w-full max-w-md p-10 rounded-[3rem] text-center">
-            <div class="w-20 h-20 bg-indigo-600 rounded-3xl mx-auto mb-6 flex items-center justify-center">
-                <i data-lucide="shield-check" class="text-white w-10 h-10"></i>
+    <div id="authScreen" class="fixed inset-0 z-[100] bg-[#030508] flex items-center justify-center p-6">
+        <div class="glass w-full max-w-md p-10 rounded-[3.5rem] text-center border-white/5">
+            <div class="w-24 h-24 bg-slate-900 rounded-[2rem] mx-auto mb-8 flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
+                <img src="icon.png" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150'">
             </div>
-            <h2 class="text-2xl font-black uppercase tracking-tighter mb-2">Elite Finance</h2>
-            <p class="text-slate-500 text-sm mb-8">Sincronização em Nuvem</p>
+            <h2 class="text-3xl font-black uppercase tracking-tighter mb-2">Elite<span class="text-indigo-500">Finance</span></h2>
+            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-10">Sincronização em Nuvem</p>
+            
             <div class="space-y-4">
-                <input type="email" id="email" placeholder="E-mail" class="w-full bg-slate-900 border border-slate-800 p-4 rounded-2xl outline-none text-white font-bold">
-                <input type="password" id="password" placeholder="Senha" class="w-full bg-slate-900 border border-slate-800 p-4 rounded-2xl outline-none text-white font-bold">
-                <button onclick="handleLogin()" class="w-full bg-white text-black font-black py-4 rounded-2xl uppercase text-xs active:scale-95 transition-all">Entrar / Cadastrar</button>
+                <input type="email" id="email" placeholder="E-MAIL" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold text-xs focus:border-indigo-500 transition-all">
+                <input type="password" id="password" placeholder="SENHA" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold text-xs focus:border-indigo-500 transition-all">
+                <button type="button" onclick="handleAuth()" id="btnAuth" class="btn-active w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-[10px] transition-all shadow-xl">
+                    Acessar Minha Conta
+                </button>
+                <p id="authMsg" class="text-[9px] font-bold text-slate-600 uppercase mt-4"></p>
             </div>
         </div>
     </div>
 
-    <!-- DASHBOARD PRINCIPAL (Escondido até logar) -->
+    <!-- DASHBOARD (Escondido até o Login) -->
     <div id="mainDashboard" class="is-hidden">
         <header class="max-w-7xl mx-auto flex justify-between items-center mb-10">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-slate-900 rounded-2xl overflow-hidden border border-white/5">
                     <img src="icon.png" class="w-full h-full object-cover">
                 </div>
-                <h1 class="text-xl font-black uppercase">Elite<span class="text-indigo-500">Finance</span></h1>
+                <h1 class="text-xl font-black uppercase tracking-tighter">Elite<span class="text-indigo-500">Finance</span></h1>
             </div>
             <div class="flex gap-3">
-                <button onclick="handleLogout()" class="text-slate-500 p-3"><i data-lucide="log-out" class="w-5 h-5"></i></button>
-                <button onclick="openModal('modalCard')" class="bg-indigo-600 text-white font-black px-5 py-3 rounded-xl uppercase text-[10px]">+ Novo</button>
+                <button onclick="handleLogout()" class="text-slate-600 hover:text-rose-500 p-3 transition-colors"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+                <button onclick="openModal('modalCard')" class="bg-indigo-600 text-white font-black px-6 py-4 rounded-2xl uppercase text-[10px] shadow-lg btn-active">+ Novo Cartão</button>
             </div>
         </header>
 
-        <!-- INDICADORES -->
-        <section id="stats" class="max-w-7xl mx-auto flex gap-4 overflow-x-auto pb-4 mb-10 no-scrollbar">
-            <!-- Renderizado via JS -->
-        </section>
-
-        <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cardsGrid"></main>
+        <section id="statsContainer" class="max-w-7xl mx-auto stats-container mb-12"></section>
+        <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></main>
     </div>
 
     <!-- MODAL NOVO CARTÃO -->
-    <div id="modalCard" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-6">
-        <div class="glass w-full max-w-lg rounded-[3rem] p-10">
-            <h3 class="text-xl font-black mb-8 uppercase text-center">Novo Cartão</h3>
-            <div class="space-y-4">
-                <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 p-4 rounded-2xl text-white font-bold">
+    <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
+        <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
+            <h3 class="text-2xl font-black mb-8 uppercase text-center text-white tracking-tighter">Configurar Cartão</h3>
+            <div class="space-y-6">
+                <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
                     <option value="Neon">Neon</option><option value="Nubank">Nubank</option><option value="C6">C6 Bank</option>
                     <option value="PicPay">PicPay</option><option value="Santander">Santander</option><option value="Inter">Inter</option>
+                    <option value="Bradesco">Bradesco</option><option value="Itau">Itaú</option><option value="BB">Banco do Brasil</option>
                 </select>
-                <input type="text" id="cardUse" placeholder="Finalidade" class="w-full bg-slate-900 border border-slate-800 p-4 rounded-2xl text-white font-bold uppercase">
-                <input type="number" id="cardLimit" placeholder="Limite Total R$" class="w-full bg-slate-900 border border-slate-800 p-4 rounded-2xl text-white font-bold">
-                <div class="flex gap-4 pt-4">
-                    <button onclick="closeModal('modalCard')" class="flex-1 text-slate-500 font-bold uppercase text-xs">Cancelar</button>
-                    <button onclick="addCard()" class="flex-1 bg-white text-black font-black py-4 rounded-2xl uppercase text-xs">Salvar</button>
+                <input type="text" id="cardUse" placeholder="FINALIDADE (EX: PESSOAL)" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm uppercase outline-none">
+                <input type="number" id="cardLimit" placeholder="LIMITE TOTAL R$" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
+                <div class="flex gap-6 pt-6">
+                    <button onclick="closeModal('modalCard')" class="flex-1 font-bold text-slate-500 uppercase text-[10px]">Cancelar</button>
+                    <button onclick="addCard()" class="flex-1 bg-white text-black font-black py-5 rounded-2xl uppercase text-[10px] btn-active">Confirmar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO SUPABASE
-        // Atualize estas linhas no seu index.html
-const SUPABASE_URL = 'https://tvnemrwsgfzpgirtfva.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_igDsMzHu02e9iiz6MagFLg_ihjk2...'; // Aquela chave da imagem anterior
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // --- CONFIGURAÇÃO SUPABASE ---
+        const SUPABASE_URL = 'https://tvnemrwsgfzpgirtfva.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_igDsMzHu02e9iiz6MagFLg_ihjk2...'; // COLOQUE SUA CHAVE COMPLETA AQUI
 
-        let currentUser = null;
+        let _supabase;
+        let user = null;
 
-        // AUTH LOGIC
-        async function handleLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            
-            if (error) {
-                // Tenta cadastrar se não existir
-                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
-                if (signUpError) return alert(signUpError.message);
-                alert("Verifique seu e-mail para confirmar o cadastro!");
+        // Inicializa o cliente Supabase assim que a página carrega
+        window.onload = () => {
+            if (typeof supabase === 'undefined') {
+                alert("Erro: Biblioteca Supabase não carregada. Verifique sua conexão.");
             } else {
-                currentUser = data.user;
-                showDashboard();
+                _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                checkSession();
+            }
+            lucide.createIcons();
+        };
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                user = session.user;
+                initApp();
             }
         }
 
+        // --- AUTH LOGIC ---
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btnAuth');
+            const msg = document.getElementById('authMsg');
+
+            if (!email || !password) return alert("Preencha todos os campos!");
+
+            btn.innerText = "VERIFICANDO...";
+            console.log("Tentando login para:", email);
+
+            try {
+                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+                
+                if (error) {
+                    console.log("Erro no login, tentando cadastro...");
+                    const { data: up, error: errUp } = await _supabase.auth.signUp({ email, password });
+                    
+                    if (errUp) {
+                        alert("Erro: " + errUp.message);
+                        console.error(errUp);
+                    } else {
+                        msg.innerText = "CADASTRO REALIZADO! VERIFIQUE SEU E-MAIL.";
+                        alert("Enviamos um e-mail de confirmação. Você precisa clicar no link lá para conseguir logar!");
+                    }
+                } else {
+                    user = data.user;
+                    initApp();
+                }
+            } catch (e) {
+                alert("Erro crítico no sistema. Verifique o console.");
+                console.error(e);
+            }
+            btn.innerText = "Acessar Minha Conta";
+        }
+
         async function handleLogout() {
-            await supabase.auth.signOut();
+            await _supabase.auth.signOut();
             location.reload();
         }
 
-        function showDashboard() {
+        // --- UI E DADOS ---
+        async function initApp() {
             document.getElementById('authScreen').classList.add('is-hidden');
             document.getElementById('mainDashboard').classList.remove('is-hidden');
-            loadData();
+            fetchData();
         }
 
-        // DATA LOGIC (CLOUD SYNC)
-        async function loadData() {
-            const { data: cartoes } = await supabase.from('cartoes').select('*').order('created_at', { ascending: false });
-            const { data: txs } = await supabase.from('transacoes').select('*').order('date', { ascending: false });
-            render(cartoes || [], txs || []);
+        async function fetchData() {
+            const { data: cards } = await _supabase.from('cartoes').select('*').order('created_at');
+            const { data: txs } = await _supabase.from('transacoes').select('*').order('date', { ascending: false });
+            render(cards || [], txs || []);
         }
 
         async function addCard() {
             const bank = document.getElementById('bankSelect').value;
-            const use_name = document.getElementById('cardUse').value.toUpperCase();
+            const use_name = (document.getElementById('cardUse').value || 'GERAL').toUpperCase();
             const card_limit = parseFloat(document.getElementById('cardLimit').value);
             
-            await supabase.from('cartoes').insert([{ user_id: currentUser.id, bank, use_name, card_limit }]);
+            if(isNaN(card_limit)) return alert("Limite inválido!");
+
+            const { error } = await _supabase.from('cartoes').insert([{ user_id: user.id, bank, use_name, card_limit }]);
+            if(error) alert(error.message);
             closeModal('modalCard');
-            loadData();
+            fetchData();
         }
 
         async function addExpense(cardId) {
@@ -140,15 +195,145 @@ const SUPABASE_KEY = 'sb_publishable_igDsMzHu02e9iiz6MagFLg_ihjk2...'; // Aquela
             const date = document.getElementById(`date-${cardId}`).value;
             const category_id = document.getElementById(`cat-${cardId}`).value;
 
-            await supabase.from('transacoes').insert([{ user_id: currentUser.id, card_id: cardId, description: desc, amount, date, category_id }]);
-            // Atualizar gasto no cartão (simplificado)
-            loadData();
+            if(!desc || isNaN(amount)) return alert("Preencha os dados da despesa!");
+
+            const { error } = await _supabase.from('transacoes').insert([{ user_id: user.id, card_id: cardId, description: desc.toUpperCase(), amount, date, category_id }]);
+            
+            if(!error) {
+                const { data: c } = await _supabase.from('cartoes').select('spent').eq('id', cardId).single();
+                await _supabase.from('cartoes').update({ spent: (c.spent || 0) + amount }).eq('id', cardId);
+                fetchData();
+            } else {
+                alert(error.message);
+            }
         }
 
-        // Mantenha as funções de renderização (render, toggleExpand, etc) adaptadas para os nomes das colunas do Supabase
-        // ... (Logística de UI similar à anterior, mas puxando do 'data' do banco) ...
-        
-        lucide.createIcons();
+        async function deleteCard(id) {
+            if(confirm("Excluir este cartão?")) {
+                await _supabase.from('cartoes').delete().eq('id', id);
+                fetchData();
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function toggleExpand(id) {
+            document.getElementById(`card-wrap-${id}`).classList.toggle('is-expanded');
+            lucide.createIcons();
+        }
+
+        // --- RENDERIZAÇÃO ---
+        const bankLogos = {
+            Neon: `<circle cx="50" cy="50" r="45" fill="#0ea5e9"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">N</text>`,
+            Nubank: `<circle cx="50" cy="50" r="45" fill="#9333ea"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">Nu</text>`,
+            C6: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#111"/><text x="50" y="65" text-anchor="middle" fill="#facc15" font-weight="900" font-size="40">C6</text>`,
+            PicPay: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#21C25E"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="30">PPay</text>`,
+            Santander: `<circle cx="50" cy="50" r="45" fill="#EC0000"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">S</text>`,
+            Inter: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ff7a00"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">In</text>`,
+            Bradesco: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#cc092f"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">B</text>`,
+            Itau: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ec6608"/><text x="50" y="65" text-anchor="middle" fill="#003399" font-weight="900" font-size="40">I</text>`,
+            BB: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#FCF800"/><text x="50" y="65" text-anchor="middle" fill="#003399" font-weight="900" font-size="40">BB</text>`,
+            Caixa: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#005ca9"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">X</text>`
+        };
+
+        const categories = [
+            { id: 'cart', name: 'MERCADO', icon: '🛒' }, { id: 'pill', name: 'FARMÁCIA', icon: '💊' },
+            { id: 'burger', name: 'COMIDA', icon: '🍔' }, { id: 'gas', name: 'POSTO', icon: '⛽' },
+            { id: 'shirt', name: 'ROUPAS', icon: '👕' }, { id: 'movie', name: 'LAZER', icon: '🎬' },
+            { id: 'tech', name: 'TECH', icon: '📱' }, { id: 'health', name: 'MÉDICO', icon: '🏥' },
+            { id: 'home', name: 'CASA', icon: '🏠' }, { id: 'study', name: 'ESTUDOS', icon: '📚' },
+            { id: 'travel', name: 'VIAGEM', icon: '✈️' }, { id: 'energy', name: 'CONTAS', icon: '💡' },
+            { id: 'pets', name: 'PETS', icon: '🐾' }, { id: 'gift', name: 'PRESENTE', icon: '🎁' },
+            { id: 'invest', name: 'INVESTIMENTOS', icon: '💰' }
+        ];
+
+        function render(cards, txs) {
+            const grid = document.getElementById('cardsGrid');
+            const totalSpent = cards.reduce((a, b) => a + (b.spent || 0), 0);
+            const totalLimit = cards.reduce((a, b) => a + (b.card_limit || 0), 0);
+            const exceeded = cards.filter(c => (c.spent || 0) > c.card_limit);
+            const debt = exceeded.reduce((a, b) => a + (b.spent - b.card_limit), 0);
+
+            document.getElementById('statsContainer').innerHTML = `
+                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Total Gasto</span>
+                    <h2 class="text-2xl font-black">R$ ${totalSpent.toLocaleString('pt-BR')}</h2>
+                </div>
+                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                    <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 block">Disponível</span>
+                    <h2 class="text-2xl font-black text-emerald-400">R$ ${Math.max(0, totalLimit - totalSpent).toLocaleString('pt-BR')}</h2>
+                </div>
+                <div class="glass p-8 rounded-[2.5rem] stats-card">
+                    <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-2 block">Dívida Ativa</span>
+                    <h2 class="text-2xl font-black text-rose-500">R$ ${debt.toLocaleString('pt-BR')}</h2>
+                </div>
+            `;
+
+            grid.innerHTML = cards.map(c => {
+                const isOver = (c.spent || 0) > c.card_limit;
+                const perc = Math.min(((c.spent || 0)/c.card_limit)*100, 100);
+                const cardTxs = txs.filter(t => t.card_id === c.id);
+
+                return `
+                <div id="card-wrap-${c.id}" class="card-main p-8 md:p-10 flex flex-col ${isOver ? 'border-rose-500 shadow-2xl shadow-rose-500/10' : ''}">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4">
+                            <div class="w-14 h-14 bg-white rounded-2xl p-2 flex items-center justify-center">
+                                <svg viewBox="0 0 100 100" class="w-full h-full">${bankLogos[c.bank] || ''}</svg>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-xl tracking-tighter uppercase text-white">${c.bank}</h4>
+                                <span class="bg-indigo-900/30 text-indigo-400 text-[8px] font-black px-3 py-1 rounded-full uppercase border border-indigo-500/20 tracking-widest">${c.use_name}</span>
+                            </div>
+                        </div>
+                        <button onclick="deleteCard('${c.id}')" class="text-slate-800 hover:text-rose-500 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-black ${isOver ? 'text-rose-500' : 'text-white'}">R$ ${(c.spent || 0).toFixed(2)}</h2>
+                        <div class="flex justify-between text-[9px] font-black text-slate-500 mt-4 uppercase tracking-widest">
+                            <span>USO: ${perc.toFixed(0)}%</span>
+                            <span>LIMITE: R$ ${c.card_limit}</span>
+                        </div>
+                        <div class="h-2 w-full bg-slate-900 rounded-full mt-4 overflow-hidden">
+                            <div class="h-full ${isOver ? 'bg-rose-500' : 'bg-indigo-500'} rounded-full transition-all duration-1000" style="width: ${perc}%"></div>
+                        </div>
+                    </div>
+                    <button onclick="toggleExpand('${c.id}')" class="toggle-btn w-full mt-8 py-4 bg-slate-800/40 rounded-2xl text-[9px] font-black text-slate-400 hover:bg-indigo-500/10 hover:text-indigo-400 transition-all uppercase tracking-widest">Gerenciar Despesas</button>
+                    <div class="expandable-content">
+                        <div class="bg-black/30 rounded-[2rem] p-6 mb-8 border border-white/5 space-y-4 max-h-[300px] overflow-y-auto custom-scroll">
+                            ${cardTxs.map(t => `
+                                <div class="item-row p-4 flex justify-between items-center">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-xl">${categories.find(cat => cat.id === t.category_id)?.icon || '💰'}</span>
+                                        <div>
+                                            <p class="text-[10px] font-black uppercase text-slate-200 tracking-tight">${t.description}</p>
+                                            <span class="text-[8px] text-slate-600 font-bold">${t.date.split('-').reverse().join('/')}</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] font-black text-rose-500">- R$ ${t.amount.toFixed(2)}</span>
+                                </div>
+                            `).join('') || '<p class="text-center text-[9px] text-slate-700 font-black py-4 uppercase">Vazio</p>'}
+                        </div>
+                        <div class="space-y-6 pt-6 border-t border-slate-800/50">
+                            <input type="text" id="desc-${c.id}" placeholder="DESCRIÇÃO..." class="w-full bg-transparent border-b border-slate-800 py-3 text-xs outline-none focus:border-indigo-500 font-bold text-white uppercase">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="number" id="val-${c.id}" placeholder="VALOR R$" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-black outline-none text-white">
+                                <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-bold outline-none text-white">
+                            </div>
+                            <select id="cat-${c.id}" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-[10px] font-black outline-none uppercase text-white">
+                                ${categories.map(cat => `<option value="${cat.id}">${cat.icon} &nbsp; ${cat.name}</option>`).join('')}
+                            </select>
+                            <button onclick="addExpense('${c.id}')" class="btn-active w-full bg-white text-black font-black py-5 rounded-[1.5rem] text-[10px] hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-tighter shadow-2xl">Confirmar Lançamento</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
 </body>
 </html>
