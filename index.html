@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- PWA & MOBILE SETTINGS -->
+    <!-- PWA SETTINGS -->
+    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="EliteFinance">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234f46e5'/><path d='M50 25L75 35V55C75 70 50 80 50 80C50 80 25 70 25 55V35L50 25Z' fill='white'/></svg>">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta name="theme-color" content="#030508">
 
-    <title>Finance Elite Pro | Master</title>
+    <title>Elite Finance Pro | Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -31,8 +33,7 @@
         .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
         .card-exceeded { border: 2px solid #f43f5e; box-shadow: 0 0 30px rgba(244, 63, 94, 0.1); }
         
-        /* Expansão das despesas */
-        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, opacity 0.3s; opacity: 0; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.6s ease-in-out, opacity 0.3s; opacity: 0; }
         .is-expanded .expandable-content { max-height: 2000px; opacity: 1; margin-top: 2rem; }
         
         .item-row { background: #111827; border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.03); }
@@ -43,11 +44,11 @@
 </head>
 <body class="p-4 md:p-10 custom-scroll">
 
-    <!-- CABEÇALHO -->
-    <header class="max-w-7xl mx-auto flex justify-between items-center mb-8">
-        <div class="flex items-center gap-3">
-            <div class="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/20">
-                <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
+    <!-- CABEÇALHO COM A SUA LOGO (hjhgghghjh.png) -->
+    <header class="max-w-7xl mx-auto flex justify-between items-center mb-10">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-slate-900 rounded-2xl shadow-lg overflow-hidden flex items-center justify-center border border-white/5">
+                <img src="icon.png" alt="Logo" class="w-full h-full object-cover">
             </div>
             <h1 class="text-2xl font-black tracking-tighter uppercase">Elite<span class="text-indigo-500">Finance</span></h1>
         </div>
@@ -56,11 +57,11 @@
         </button>
     </header>
 
-    <!-- INDICADORES (Carrossel no Mobile) -->
+    <!-- INDICADORES GLOBAIS (Deslizáveis no Mobile) -->
     <section class="max-w-7xl mx-auto stats-container mb-12 custom-scroll">
         <div class="glass p-8 rounded-[2.5rem] stats-card">
             <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Total Gasto</span>
-            <h2 id="totalSpent" class="text-2xl font-black">R$ 0,00</h2>
+            <h2 id="totalSpent" class="text-2xl font-black text-white">R$ 0,00</h2>
         </div>
         <div class="glass p-8 rounded-[2.5rem] stats-card">
             <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 block">Disponível</span>
@@ -71,20 +72,20 @@
             <h2 id="activeDebt" class="text-2xl font-black text-rose-500">R$ 0,00</h2>
         </div>
         <div class="glass p-8 rounded-[2.5rem] stats-card">
-            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Status</span>
-            <h2 id="exceededStatus" class="text-[10px] font-black text-emerald-400 uppercase mt-1">Perfeita ✓</h2>
+            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Saúde Financeira</span>
+            <h2 id="exceededStatus" class="text-[10px] font-black text-emerald-400 uppercase mt-1 tracking-tighter">Perfeita ✓</h2>
         </div>
     </section>
 
     <!-- GRID DE CARTÕES -->
     <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="cardsGrid"></main>
 
-    <!-- MODAL: NOVO CARTÃO -->
+    <!-- MODAL NOVO CARTÃO -->
     <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
         <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
-            <h3 class="text-2xl font-black mb-8 tracking-tighter uppercase text-center">Configurar Cartão</h3>
+            <h3 class="text-2xl font-black mb-8 tracking-tighter uppercase text-center text-white">Configurar Cartão</h3>
             <div class="space-y-6">
-                <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm">
+                <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm text-white">
                     <option value="Neon">Neon</option>
                     <option value="Nubank">Nubank</option>
                     <option value="C6">C6 Bank</option>
@@ -96,8 +97,8 @@
                     <option value="BB">Banco do Brasil</option>
                     <option value="Caixa">Caixa</option>
                 </select>
-                <input type="text" id="cardUse" placeholder="Uso (Ex: Farmácia)" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none uppercase font-bold text-sm">
-                <input type="number" id="cardLimit" placeholder="Limite Total R$" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm">
+                <input type="text" id="cardUse" placeholder="Uso (Ex: Farmácia)" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none uppercase font-bold text-sm text-white">
+                <input type="number" id="cardLimit" placeholder="Limite Total R$" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 outline-none font-bold text-sm text-white">
                 <div class="flex gap-6 pt-6">
                     <button onclick="closeModal('modalCard')" class="flex-1 font-bold text-slate-500 uppercase text-xs">Cancelar</button>
                     <button onclick="addCard()" class="flex-1 bg-white text-black font-black py-4 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all uppercase text-xs">Salvar</button>
@@ -138,8 +139,12 @@
             { id: 'invest', name: 'INVESTIMENTOS', icon: '💰' }
         ];
 
-        let cards = JSON.parse(localStorage.getItem('elite_master_v11')) || [];
-        let txs = JSON.parse(localStorage.getItem('tx_elite_v11')) || [];
+        let cards = JSON.parse(localStorage.getItem('elite_pwa_v2')) || [];
+        let txs = JSON.parse(localStorage.getItem('tx_pwa_v2')) || [];
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => console.log("SW Registered"));
+        }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
@@ -187,8 +192,8 @@
         }
 
         function sync() {
-            localStorage.setItem('elite_master_v11', JSON.stringify(cards));
-            localStorage.setItem('tx_elite_v11', JSON.stringify(txs));
+            localStorage.setItem('elite_pwa_v2', JSON.stringify(cards));
+            localStorage.setItem('tx_pwa_v2', JSON.stringify(txs));
             render();
         }
 
@@ -206,10 +211,10 @@
             const statusEl = document.getElementById('exceededStatus');
             if(exceeded.length > 0) {
                 statusEl.innerText = "ALERTA: DÍVIDA!";
-                statusEl.className = "text-[10px] font-black text-rose-500 animate-pulse mt-1";
+                statusEl.className = "text-[10px] font-black text-rose-500 animate-pulse mt-1 uppercase";
             } else {
                 statusEl.innerText = "Saúde Perfeita ✓";
-                statusEl.className = "text-[10px] font-black text-emerald-400 mt-1";
+                statusEl.className = "text-[10px] font-black text-emerald-400 mt-1 uppercase";
             }
 
             grid.innerHTML = cards.map(c => {
@@ -225,7 +230,7 @@
                                 <svg viewBox="0 0 100 100" class="w-full h-full">${bankLogos[c.bank]}</svg>
                             </div>
                             <div>
-                                <h4 class="font-black text-xl tracking-tighter uppercase">${c.bank}</h4>
+                                <h4 class="font-black text-xl tracking-tighter uppercase text-white">${c.bank}</h4>
                                 <span class="bg-indigo-900/30 text-indigo-400 text-[8px] font-black px-3 py-1 rounded-full uppercase border border-indigo-500/20 tracking-widest">${c.use}</span>
                             </div>
                         </div>
@@ -267,12 +272,12 @@
                         </div>
 
                         <div class="space-y-6 pt-6 border-t border-slate-800/50">
-                            <input type="text" id="desc-${c.id}" placeholder="Descrição..." class="w-full bg-transparent border-b border-slate-800 py-3 text-xs outline-none focus:border-indigo-500 font-bold placeholder:text-slate-700 uppercase">
+                            <input type="text" id="desc-${c.id}" placeholder="Descrição..." class="w-full bg-transparent border-b border-slate-800 py-3 text-xs outline-none focus:border-indigo-500 font-bold text-white placeholder:text-slate-700 uppercase">
                             <div class="grid grid-cols-2 gap-4">
-                                <input type="number" id="val-${c.id}" placeholder="Valor R$" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-black outline-none">
-                                <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-bold outline-none">
+                                <input type="number" id="val-${c.id}" placeholder="Valor R$" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-black outline-none text-white">
+                                <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-4 border border-slate-800 text-[10px] font-bold outline-none text-white">
                             </div>
-                            <select id="cat-${c.id}" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-[10px] font-black outline-none appearance-none uppercase">
+                            <select id="cat-${c.id}" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-[10px] font-black outline-none appearance-none uppercase text-white">
                                 ${allCategories.map(cat => `<option value="${cat.id}">${cat.icon} &nbsp; ${cat.name}</option>`).join('')}
                             </select>
                             <button onclick="addExpense(${c.id})" class="w-full bg-white text-black font-black py-5 rounded-[1.5rem] text-[10px] hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-tighter shadow-2xl">Confirmar Lançamento</button>
