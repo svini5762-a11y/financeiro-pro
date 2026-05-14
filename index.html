@@ -7,157 +7,86 @@
     <meta name="theme-color" content="#030508">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-
-    <title>Elite Finance Pro | Cloud</title>
+    <title>Elite Finance Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Biblioteca Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030508; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
-        .glass { background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.03); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030508; color: #f8fafc; }
         .is-hidden { display: none !important; }
-        @media (max-width: 768px) {
-            .stats-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 1rem; padding-bottom: 1rem; scrollbar-width: none; }
-            .stats-container::-webkit-scrollbar { display: none; }
-            .stats-card { min-width: 85%; scroll-snap-align: center; }
-            .card-main { padding: 1.5rem !important; border-radius: 2.5rem !important; }
-        }
-        .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; opacity: 0; }
-        .is-expanded .expandable-content { max-height: 2000px; opacity: 1; margin-top: 1.5rem; }
-        .item-row { background: #111827; border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.03); }
+        .glass { background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <!-- TELA DE LOGIN -->
     <div id="authScreen" class="fixed inset-0 z-[100] bg-[#030508] flex items-center justify-center p-6">
-        <div class="glass w-full max-w-md p-10 rounded-[3.5rem] text-center border-white/5">
-            <div class="w-24 h-24 bg-slate-900 rounded-[2rem] mx-auto mb-8 flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
-                <img src="icon.png" class="w-full h-full object-cover">
-            </div>
-            <h2 class="text-3xl font-black uppercase tracking-tighter mb-2">Elite<span class="text-indigo-500">Finance</span></h2>
-            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-10">Sincronização em Nuvem</p>
-            
+        <div class="glass w-full max-w-md p-10 rounded-[3rem] text-center">
+            <h2 class="text-3xl font-black uppercase mb-8">Elite<span class="text-indigo-500">Finance</span></h2>
             <div class="space-y-4">
-                <input type="email" id="email" placeholder="E-MAIL" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold text-xs">
-                <input type="password" id="password" placeholder="SENHA" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold text-xs">
-                <!-- AQUI ESTÁ A CORREÇÃO: Função renomeada para handleAuth -->
-                <button type="button" onclick="handleAuth()" id="btnAuth" class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-[10px] active:scale-95 transition-all shadow-xl">
-                    Acessar Minha Conta
-                </button>
+                <input type="email" id="email" placeholder="E-MAIL" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold">
+                <input type="password" id="password" placeholder="SENHA" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl outline-none text-white font-bold">
+                <button onclick="handleAuth()" id="btnAuth" class="w-full bg-white text-black font-black py-5 rounded-2xl uppercase text-[10px] shadow-xl">Acessar Conta</button>
             </div>
         </div>
     </div>
 
-    <!-- DASHBOARD PRINCIPAL -->
     <div id="mainDashboard" class="is-hidden">
-        <header class="max-w-7xl mx-auto flex justify-between items-center mb-10">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-slate-900 rounded-2xl overflow-hidden border border-white/5">
-                    <img src="icon.png" class="w-full h-full object-cover">
-                </div>
-                <h1 class="text-xl font-black uppercase tracking-tighter">Elite<span class="text-indigo-500">Finance</span></h1>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="handleLogout()" class="text-slate-600 hover:text-rose-500 p-3 transition-colors"><i data-lucide="log-out" class="w-5 h-5"></i></button>
-                <button onclick="openModal('modalCard')" class="bg-indigo-600 text-white font-black px-6 py-4 rounded-2xl uppercase text-[10px] shadow-lg active:scale-95 transition-all">+ Novo Cartão</button>
-            </div>
-        </header>
-        <section id="statsContainer" class="max-w-7xl mx-auto stats-container mb-12"></section>
-        <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></main>
-    </div>
-
-    <!-- MODAL NOVO CARTÃO -->
-    <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
-        <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
-            <h3 class="text-2xl font-black mb-8 uppercase text-center text-white tracking-tighter">Configurar Cartão</h3>
-            <div class="space-y-6">
-                <select id="bankSelect" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
-                    <option value="Neon">Neon</option><option value="Nubank">Nubank</option><option value="C6">C6 Bank</option>
-                    <option value="PicPay">PicPay</option><option value="Santander">Santander</option><option value="Inter">Inter</option>
-                </select>
-                <input type="text" id="cardUse" placeholder="FINALIDADE" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm uppercase outline-none">
-                <input type="number" id="cardLimit" placeholder="LIMITE TOTAL" class="w-full bg-slate-900 border border-slate-800 p-5 rounded-2xl text-white font-bold text-sm outline-none">
-                <div class="flex gap-6 pt-6">
-                    <button onclick="closeModal('modalCard')" class="flex-1 font-bold text-slate-500 uppercase text-[10px]">Cancelar</button>
-                    <button onclick="addCard()" class="flex-1 bg-white text-black font-black py-5 rounded-2xl uppercase text-[10px]">Confirmar</button>
-                </div>
-            </div>
-        </div>
+        <h1 class="text-white">Logado com sucesso!</h1>
+        <button onclick="handleLogout()" class="bg-rose-500 p-4 rounded-xl mt-4">Sair</button>
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO ---
-        const SUPABASE_URL = 'https://tvnemrwsgfzpgirtfva.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_igDsMzHuO2e9iiz6MagFLg_ihjk276D'; // COLOQUE A CHAVE COMPLETA AQUI
+        // URL extraída da sua imagem
+        const SUPABASE_URL = 'https://tvnemrwsgfzpgirtfva.supabase.co'; 
+        // Use a chave COMPLETA da sua imagem
+        const SUPABASE_KEY = 'sb_publishable_igDsMzHuO2e9iiz6MagFLg_ihjk276D'; 
 
         let supabaseClient;
         let user = null;
 
         window.onload = () => {
-            // AQUI ESTÁ A CORREÇÃO: Usando supabaseClient para evitar conflito com a global 'supabase'
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            checkSession();
-            lucide.createIcons();
+            try {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                checkSession();
+            } catch (e) {
+                console.error("Erro ao conectar:", e);
+            }
         };
 
         async function checkSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                user = session.user;
-                initApp();
-            }
+            if (session) { user = session.user; showApp(); }
         }
 
         async function handleAuth() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const btn = document.getElementById('btnAuth');
+            btn.innerText = "CONECTANDO...";
 
-            if (!email || !password) return alert("Preencha os campos!");
-            btn.innerText = "VERIFICANDO...";
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                const { error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                if (signUpError) alert("Erro: " + signUpError.message);
+                else alert("Verifique seu e-mail para confirmar o cadastro!");
+            } else {
+                user = data.user;
+                showApp();
+            }
+            btn.innerText = "Acessar Conta";
+        }
 
-            try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                if (error) {
-                    const { data: up, error: errUp } = await supabaseClient.auth.signUp({ email, password });
-                    if (errUp) alert("Erro: " + errUp.message);
-                    else alert("Cadastro realizado! Confirme no seu e-mail.");
-                } else {
-                    user = data.user;
-                    initApp();
-                }
-            } catch (e) { console.error(e); }
-            btn.innerText = "Acessar Minha Conta";
+        function showApp() {
+            document.getElementById('authScreen').classList.add('is-hidden');
+            document.getElementById('mainDashboard').classList.remove('is-hidden');
         }
 
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             location.reload();
         }
-
-        async function initApp() {
-            document.getElementById('authScreen').classList.add('is-hidden');
-            document.getElementById('mainDashboard').classList.remove('is-hidden');
-            fetchData();
-        }
-
-        async function fetchData() {
-            const { data: cards } = await supabaseClient.from('cartoes').select('*').order('created_at');
-            const { data: txs } = await supabaseClient.from('transacoes').select('*').order('date', { ascending: false });
-            render(cards || [], txs || []);
-        }
-
-        // --- AS OUTRAS FUNÇÕES (addCard, addExpense, render) CONTINUAM ABAIXO ---
-        // Certifique-se de que todas usem 'supabaseClient' em vez de 'supabase'
-        
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        // ... resta do código ...
     </script>
 </body>
 </html>
