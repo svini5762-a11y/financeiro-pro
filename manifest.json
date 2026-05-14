@@ -1,0 +1,18 @@
+{
+  "short_name": "EliteFinance",
+  "name": "Finance Elite Pro Master",
+  "description": "Gestão Financeira Profissional",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#030508",
+  "background_color": "#030508"
+}
