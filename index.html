@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <title>Elite Finance Pro | Cloud Master</title>
+    <title>Elite Finance Pro | Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -29,7 +29,7 @@
 
         .card-main { background-color: #0b101a; border-radius: 3rem; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; }
         .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; opacity: 0; }
-        .is-expanded .expandable-content { max-height: 2000px; opacity: 1; margin-top: 1.5rem; }
+        .is-expanded .expandable-content { max-height: 3000px; opacity: 1; margin-top: 1.5rem; }
         
         .item-row { background: #111827; border-radius: 1.8rem; border: 1px solid rgba(255, 255, 255, 0.02); }
         .icon-box { background: #0b101a; border: 1px solid rgba(255, 255, 255, 0.05); min-width: 3.5rem; height: 3.5rem; }
@@ -39,6 +39,7 @@
 </head>
 <body class="p-4 md:p-10">
 
+    <!-- LOGIN -->
     <div id="authScreen" class="fixed inset-0 z-[100] bg-[#030508] flex items-center justify-center p-6">
         <div class="glass w-full max-w-md p-10 rounded-[3.5rem] text-center border-white/5">
             <div class="w-24 h-24 bg-slate-900 rounded-[2rem] mx-auto mb-8 flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
@@ -53,6 +54,7 @@
         </div>
     </div>
 
+    <!-- DASHBOARD -->
     <div id="mainDashboard" class="is-hidden">
         <header class="max-w-7xl mx-auto flex justify-between items-center mb-10">
             <div class="flex items-center gap-4">
@@ -71,6 +73,7 @@
         <main class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></main>
     </div>
 
+    <!-- MODAL -->
     <div id="modalCard" class="fixed inset-0 bg-black/98 backdrop-blur-2xl z-50 hidden flex items-center justify-center p-6">
         <div class="glass w-full max-w-lg rounded-[3.5rem] p-12">
             <h3 class="text-2xl font-black mb-8 uppercase text-center text-white tracking-tighter">Novo Cartão</h3>
@@ -137,6 +140,13 @@
             fetchData();
         }
 
+        async function deleteCard(id) {
+            if(confirm("Deseja apagar este cartão permanentemente?")) {
+                await _supabase.from('cartoes').delete().eq('id', id);
+                fetchData();
+            }
+        }
+
         async function addExpense(cardId) {
             const desc = document.getElementById(`desc-${cardId}`).value;
             const amount = parseFloat(document.getElementById(`val-${cardId}`).value);
@@ -147,9 +157,10 @@
             fetchData();
         }
 
-        async function deleteCard(id) {
-            if(confirm("Excluir cartão?")) {
-                await _supabase.from('cartoes').delete().eq('id', id);
+        // --- NOVA FUNÇÃO DE EXCLUSÃO DE DESPESA ---
+        async function deleteExpense(tId) {
+            if(confirm("Remover esta despesa?")) {
+                await _supabase.from('transacoes').delete().eq('id', tId);
                 fetchData();
             }
         }
@@ -171,22 +182,14 @@
             Inter: `<rect width="90" height="90" x="5" y="5" rx="20" fill="#ff7a00"/><text x="50" y="65" text-anchor="middle" fill="white" font-weight="900" font-size="40">In</text>`
         };
 
-        // LISTA DE CATEGORIAS COMPLETA (15 OPÇÕES)
         const categories = [
-            { id: 'cart', name: 'MERCADO', icon: '🛒' },
-            { id: 'pill', name: 'FARMÁCIA', icon: '💊' },
-            { id: 'burger', name: 'COMIDA', icon: '🍔' },
-            { id: 'gas', name: 'POSTO', icon: '⛽' },
-            { id: 'shirt', name: 'ROUPAS', icon: '👕' },
-            { id: 'movie', name: 'LAZER', icon: '🎬' },
-            { id: 'tech', name: 'TECH', icon: '📱' },
-            { id: 'health', name: 'MÉDICO', icon: '🏥' },
-            { id: 'home', name: 'CASA', icon: '🏠' },
-            { id: 'study', name: 'ESTUDOS', icon: '📚' },
-            { id: 'travel', name: 'VIAGEM', icon: '✈️' },
-            { id: 'energy', name: 'CONTAS', icon: '💡' },
-            { id: 'pets', name: 'PETS', icon: '🐾' },
-            { id: 'gift', name: 'PRESENTE', icon: '🎁' },
+            { id: 'cart', name: 'MERCADO', icon: '🛒' }, { id: 'pill', name: 'FARMÁCIA', icon: '💊' },
+            { id: 'burger', name: 'COMIDA', icon: '🍔' }, { id: 'gas', name: 'POSTO', icon: '⛽' },
+            { id: 'shirt', name: 'ROUPAS', icon: '👕' }, { id: 'movie', name: 'LAZER', icon: '🎬' },
+            { id: 'tech', name: 'TECH', icon: '📱' }, { id: 'health', name: 'MÉDICO', icon: '🏥' },
+            { id: 'home', name: 'CASA', icon: '🏠' }, { id: 'study', name: 'ESTUDOS', icon: '📚' },
+            { id: 'travel', name: 'VIAGEM', icon: '✈️' }, { id: 'energy', name: 'CONTAS', icon: '💡' },
+            { id: 'pets', name: 'PETS', icon: '🐾' }, { id: 'gift', name: 'PRESENTE', icon: '🎁' },
             { id: 'invest', name: 'INVESTIMENTOS', icon: '💰' }
         ];
 
@@ -207,20 +210,20 @@
 
             document.getElementById('statsContainer').innerHTML = `
                 <div class="glass p-8 rounded-[2.5rem] stats-card">
-                    <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block">Total Gasto</span>
+                    <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block tracking-widest">Total Gasto</span>
                     <h2 class="text-2xl font-black">R$ ${globalSpent.toFixed(2)}</h2>
                 </div>
                 <div class="glass p-8 rounded-[2.5rem] stats-card">
-                    <span class="text-[9px] font-black text-emerald-500 uppercase mb-2 block">Disponível</span>
+                    <span class="text-[9px] font-black text-emerald-500 uppercase mb-2 block tracking-widest">Disponível</span>
                     <h2 class="text-2xl font-black text-emerald-400">R$ ${Math.max(0, globalLimit - globalSpent).toFixed(2)}</h2>
                 </div>
                 <div class="glass p-8 rounded-[2.5rem] stats-card">
-                    <span class="text-[9px] font-black text-rose-500 uppercase mb-2 block">Dívida Ativa</span>
+                    <span class="text-[9px] font-black text-rose-500 uppercase mb-2 block tracking-widest">Dívida Ativa</span>
                     <h2 class="text-2xl font-black text-rose-500">R$ ${totalDebt.toFixed(2)}</h2>
                 </div>
                 <div class="glass p-8 rounded-[2.5rem] stats-card">
-                    <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block">Saúde</span>
-                    <h2 class="text-[12px] font-black uppercase ${isExceeded ? 'text-rose-500 animate-pulse' : 'text-emerald-400'}">${isExceeded ? 'Atenção' : 'Excelente'}</h2>
+                    <span class="text-[9px] font-black text-slate-500 uppercase mb-2 block tracking-widest">Saúde</span>
+                    <h2 class="text-[12px] font-black uppercase ${isExceeded ? 'text-rose-500 animate-pulse' : 'text-emerald-400'}">${isExceeded ? 'Crítica' : 'Excelente'}</h2>
                 </div>
             `;
 
@@ -230,7 +233,7 @@
                 const cardTxs = txs.filter(t => t.card_id === c.id);
 
                 return `
-                <div id="card-wrap-${c.id}" class="card-main p-10 flex flex-col ${isOver ? 'border-rose-500/40 shadow-2xl' : ''}">
+                <div id="card-wrap-${c.id}" class="card-main p-10 flex flex-col ${isOver ? 'border-rose-500/40 shadow-2xl shadow-rose-500/10' : ''}">
                     <div class="flex justify-between items-start mb-8">
                         <div class="flex gap-5">
                             <div class="w-16 h-16 bg-white rounded-3xl p-3 flex items-center justify-center shadow-lg">
@@ -238,15 +241,15 @@
                             </div>
                             <div>
                                 <h4 class="font-black text-2xl text-white uppercase tracking-tighter">${c.bank}</h4>
-                                <span class="bg-indigo-900/40 text-indigo-400 text-[9px] font-black px-4 py-1.5 rounded-full uppercase border border-indigo-500/20">${c.use_name}</span>
+                                <span class="bg-indigo-900/40 text-indigo-400 text-[9px] font-black px-4 py-1.5 rounded-full uppercase border border-indigo-500/20 tracking-widest">${c.use_name}</span>
                             </div>
                         </div>
-                        <button onclick="deleteCard('${c.id}')" class="text-slate-800 hover:text-rose-500 p-2"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
+                        <button onclick="deleteCard('${c.id}')" class="text-slate-800 hover:text-rose-500 p-2 transition-all"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
 
                     <div class="mb-8">
                         <h2 class="text-4xl font-black ${isOver ? 'text-rose-500' : 'text-white'}">R$ ${c.actualSpent.toFixed(2)}</h2>
-                        <div class="flex justify-between text-[10px] font-black text-slate-500 mt-5 uppercase tracking-widest">
+                        <div class="flex justify-between text-[10px] font-black text-slate-500 mt-5 uppercase tracking-[0.2em]">
                             <span>USO: ${perc.toFixed(0)}%</span>
                             <span>LIMITE: R$ ${c.card_limit}</span>
                         </div>
@@ -255,7 +258,7 @@
                         </div>
                     </div>
 
-                    <button onclick="toggleExpand('${c.id}')" class="w-full py-5 bg-slate-800/40 rounded-[1.8rem] text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Gerenciar Despesas</button>
+                    <button onclick="toggleExpand('${c.id}')" class="w-full py-5 bg-slate-800/40 rounded-[1.8rem] text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:bg-indigo-500/10 hover:text-indigo-400 transition-all">Gerenciar Despesas</button>
 
                     <div class="expandable-content">
                         <div class="bg-black/30 rounded-[2.5rem] p-6 mb-8 space-y-4 max-h-[400px] overflow-y-auto">
@@ -267,16 +270,21 @@
                                         </div>
                                         <div>
                                             <p class="text-[11px] font-black text-slate-100 uppercase tracking-tight">${t.description}</p>
-                                            <p class="text-[8px] font-bold text-slate-600">${t.date.split('-').reverse().join('/')}</p>
+                                            <p class="text-[8px] font-bold text-slate-600 tracking-widest">${t.date.split('-').reverse().join('/')}</p>
                                         </div>
                                     </div>
-                                    <span class="text-[11px] font-black text-rose-500">- R$ ${t.amount.toFixed(2)}</span>
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-[11px] font-black text-rose-500">- R$ ${t.amount.toFixed(2)}</span>
+                                        <button onclick="deleteExpense('${t.id}')" class="text-slate-800 hover:text-rose-500 transition-colors">
+                                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             `).join('') || '<p class="text-center text-[10px] text-slate-700 py-10 font-black uppercase tracking-widest">Lista Vazia</p>'}
                         </div>
 
                         <div class="space-y-6 pt-6 border-t border-slate-800/50">
-                            <input type="text" id="desc-${c.id}" placeholder="O QUE COMPROU?" class="w-full bg-transparent border-b border-slate-800 py-4 text-xs text-white uppercase outline-none focus:border-indigo-500 font-bold">
+                            <input type="text" id="desc-${c.id}" placeholder="O QUE COMPROU?" class="w-full bg-transparent border-b border-slate-800 py-4 text-xs text-white uppercase outline-none focus:border-indigo-500 font-bold tracking-widest">
                             <div class="grid grid-cols-2 gap-5">
                                 <input type="number" id="val-${c.id}" placeholder="VALOR R$" class="bg-slate-900 rounded-2xl p-5 text-xs text-white font-black outline-none border border-transparent focus:border-indigo-500/50">
                                 <input type="date" id="date-${c.id}" value="${new Date().toISOString().split('T')[0]}" class="bg-slate-900 rounded-2xl p-5 text-xs text-white font-bold outline-none border border-transparent focus:border-indigo-500/50">
